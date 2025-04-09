@@ -6,7 +6,7 @@ module hello::sui_fren {
     use std::vector;
     use sui::event;
     use std::option;
-    use sui::coin::{Self, TreasuryCap};
+    use sui::coin::{Self, TreasuryCap, Coin};
 
     public struct Sui_frenTresuaryCapHolder has key{
         id: UID,
@@ -56,5 +56,12 @@ module hello::sui_fren {
         let trasuray_cap = &mut treasury_cap.treasury_cap;
         coin::mint_and_transfer(trasuray_cap, amount, tx_context::sender(ctx), ctx)
     }
+
+    entry fun Transfer_half_amount(from: &mut Coin<SUI_FREN> ,amount: u64, to: &mut Coin<SUI_FREN>, ctx: &mut TxContext) {
+        //  let half_value = coin::balance(coin)(from) / 2; 
+        let half_amount = coin::take(coin::balance_mut(from), amount, ctx);
+        coin::put(coin::balance_mut(to), half_amount);
+
+       }
 
 }
