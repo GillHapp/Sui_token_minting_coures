@@ -64,23 +64,46 @@ module hello::sui_fren {
 
        }
 
-    public struct Balance<T> has store {
-        value: u64,
+//     public struct Balance<T> has store {
+//         value: u64,
+//     }
+
+//     public fun join<T>(self: &mut Balance<SUI_FREN>, balance: Balance<SUI_FREN>): u64 {
+//     let Balance { value } = balance;
+//     self.value = self.value + value;
+//     self.value
+// }
+
+//     public fun split<SUI_FREN>(self: &mut Balance<SUI_FREN>, value: u64): Balance<SUI_FREN> {
+//     assert!(self.value >= value, 0);
+//     self.value = self.value - value; // extract the value from the original balance 
+//     Balance { value } // return the new balance
+//     }
+//     public fun get_balance<SUI_FREN>(self: &Balance<SUI_FREN>): u64 {
+//         self.value
+//     }
+
+// i want to burn the coin with Sui_frenTresuaryCapHolder
+
+    // burn coin with Sui_frenTresuaryCapHolder
+    public fun burn(treasury_cap: &mut Sui_frenTresuaryCapHolder, coin:Coin<SUI_FREN>) {
+        let treasury_cap = &mut treasury_cap.treasury_cap;
+        coin::burn(treasury_cap, coin);
     }
 
-    public fun join<T>(self: &mut Balance<SUI_FREN>, balance: Balance<SUI_FREN>): u64 {
-    let Balance { value } = balance;
-    self.value = self.value + value;
-    self.value
+ // burn the specific amount of coin with Sui_frenTresuaryCapHolder
+entry fun burn_coin_with_amount(
+    treasury_cap: &mut Sui_frenTresuaryCapHolder,
+    coin: &mut Coin<SUI_FREN>,
+    amount: u64,
+    ctx: &mut TxContext
+) {
+    let coins_to_burn = coin::take(coin::balance_mut(coin), amount, ctx);
+    let cap = &mut treasury_cap.treasury_cap;
+    coin::burn(cap, coins_to_burn); 
+
+
+
 }
-
-    public fun split<SUI_FREN>(self: &mut Balance<SUI_FREN>, value: u64): Balance<SUI_FREN> {
-    assert!(self.value >= value, 0);
-    self.value = self.value - value; // extract the value from the original balance 
-    Balance { value } // return the new balance
-    }
-    public fun get_balance<SUI_FREN>(self: &Balance<SUI_FREN>): u64 {
-        self.value
-    }
 }
 
