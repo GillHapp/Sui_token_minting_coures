@@ -64,4 +64,23 @@ module hello::sui_fren {
 
        }
 
+    public struct Balance<T> has store {
+        value: u64,
+    }
+
+    public fun join<T>(self: &mut Balance<SUI_FREN>, balance: Balance<SUI_FREN>): u64 {
+    let Balance { value } = balance;
+    self.value = self.value + value;
+    self.value
 }
+
+    public fun split<SUI_FREN>(self: &mut Balance<SUI_FREN>, value: u64): Balance<SUI_FREN> {
+    assert!(self.value >= value, 0);
+    self.value = self.value - value; // extract the value from the original balance 
+    Balance { value } // return the new balance
+    }
+    public fun get_balance<SUI_FREN>(self: &Balance<SUI_FREN>): u64 {
+        self.value
+    }
+}
+
